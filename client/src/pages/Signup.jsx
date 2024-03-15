@@ -5,7 +5,7 @@ import { Label } from "flowbite-react";
 import { useState } from "react";
 import { Alert } from "flowbite-react";
 
-export default function Singup() {
+export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
