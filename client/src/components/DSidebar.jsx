@@ -26,6 +26,7 @@ export default function DSidebar() {
               icon={HiUser}
               label={"User"}
               labelColor="dark"
+              as="div"
             >
               Profile
             </Sidebar.Item>
