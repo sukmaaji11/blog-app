@@ -1,19 +1,19 @@
-import { Alert, Button, Modal, TextInput } from "flowbite-react";
-import React, { useRef } from "react";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { app } from "../firebase";
-import { CircularProgressbar } from "react-circular-progressbar";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { useDispatch } from "react-redux";
-import "react-circular-progressbar/dist/styles.css";
+import { Alert, Button, Modal, TextInput } from 'flowbite-react';
+import React, { useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { app } from '../firebase';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { useDispatch } from 'react-redux';
+import 'react-circular-progressbar/dist/styles.css';
 import {
   getDownloadURL,
   getStorage,
   uploadBytes,
   uploadBytesResumable,
   ref,
-} from "firebase/storage";
+} from 'firebase/storage';
 import {
   updateStart,
   updateSuccess,
@@ -21,7 +21,8 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
-} from "../redux/user/userSlice";
+  signoutSuccess,
+} from '../redux/user/userSlice';
 
 export default function DProfile() {
   const { currentUser, error } = useSelector((state) => state.user);
@@ -65,7 +66,7 @@ export default function DProfile() {
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
     uploadTask.on(
-      "state_changed",
+      'state_changed',
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -73,7 +74,7 @@ export default function DProfile() {
       },
       (error) => {
         setImageFileUploadError(
-          "Could Not Upload Image (file must be less than 2MB!"
+          'Could Not Upload Image (file must be less than 2MB!'
         );
         setImageFileUploadProgress(null);
         setImageFile(null);
@@ -98,19 +99,19 @@ export default function DProfile() {
     setUpdateUserError(null);
     setUpdateUserSuccess(null);
     if (Object.keys(formData).length === 0) {
-      setUpdateUserError("No changes made");
+      setUpdateUserError('No changes made');
       return;
     }
     if (imageFileUploading) {
-      setUpdateUserError("Please wait for image to upload..");
+      setUpdateUserError('Please wait for image to upload..');
       return;
     }
     try {
       dispatch(updateStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
@@ -120,7 +121,7 @@ export default function DProfile() {
         setUpdateUserError(data.message);
       } else {
         dispatch(updateSuccess(data));
-        setUpdateUserSuccess("Update Successfully");
+        setUpdateUserSuccess('Update Successfully');
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
@@ -133,7 +134,7 @@ export default function DProfile() {
     try {
       dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
       const data = await res.json();
       if (!res.ok) {
@@ -145,6 +146,23 @@ export default function DProfile() {
       dispatch(deleteUserFailure(error.message));
     }
   };
+  //Handle Signout
+  const handleSignout = async () => {
+    try {
+      const res = await fetch('/api/user/signout', {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signoutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold text-3xl">Profile</h1>
@@ -167,9 +185,9 @@ export default function DProfile() {
               strokeWidth={2}
               styles={{
                 root: {
-                  width: "100%",
-                  height: "100%",
-                  position: "absolute",
+                  width: '100%',
+                  height: '100%',
+                  position: 'absolute',
                   top: 0,
                   left: 0,
                 },
@@ -187,7 +205,7 @@ export default function DProfile() {
             className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
               imageFileUploadProgress &&
               imageFileUploadProgress < 100 &&
-              "opacity-60"
+              'opacity-60'
             }`}
           />
         </div>
@@ -217,7 +235,9 @@ export default function DProfile() {
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
           Delete Account
         </span>
-        <span className="cursor-pointer">Sign Out</span>
+        <span onClick={handleSignout} className="cursor-pointer">
+          Sign Out
+        </span>
       </div>
       {updateUserSuccess && (
         <Alert color="success" className="mt-5">
