@@ -17,7 +17,6 @@ export const signup = async (req, res, next) => {
     next(errorHandler(400, "All fields are required"));
   }
 
-  // Hash Password
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   const newUser = new User({
@@ -26,10 +25,9 @@ export const signup = async (req, res, next) => {
     password: hashedPassword,
   });
 
-  // Try Catch Post Data
   try {
     await newUser.save();
-    res.json("Signup Succesfull!");
+    res.json("Signup successful");
   } catch (error) {
     next(error);
   }
@@ -45,18 +43,14 @@ export const signin = async (req, res, next) => {
   try {
     const validUser = await User.findOne({ email });
     if (!validUser) {
-      return next(errorHandler(404, "User Not Found"));
+      return next(errorHandler(404, "User not found"));
     }
-
     const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) {
-      return next(errorHandler(400, "Invalid Password"));
+      return next(errorHandler(400, "Invalid password"));
     }
-
     const token = jwt.sign(
-      {
-        id: validUser._id,
-      },
+      { id: validUser._id, isAdmin: validUser.isAdmin },
       process.env.JWT_SECRET
     );
 
@@ -78,11 +72,14 @@ export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        { id: user._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET
+      );
       const { password, ...rest } = user._doc;
       res
         .status(200)
-        .cookie("acces_token", token, {
+        .cookie("access_token", token, {
           httpOnly: true,
         })
         .json(rest);
@@ -100,7 +97,10 @@ export const google = async (req, res, next) => {
         profilePicture: googlePhotoUrl,
       });
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        { id: newUser._id, isAdmin: newUser.isAdmin },
+        process.env.JWT_SECRET
+      );
       const { password, ...rest } = newUser._doc;
       res
         .status(200)
