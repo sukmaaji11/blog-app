@@ -87,11 +87,16 @@ export default function DCreatePost() {
   return (
     <div className="max-w-xxl p-3 px-20 mx-auto w-full">
       <h1 className="text-3xl my-7 font-semibold">
-        <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+        <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
           Create a Post
         </span>
       </h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        {publishError && (
+          <Alert className="mt-5" color="failure">
+            {publishError}
+          </Alert>
+        )}
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
@@ -163,11 +168,6 @@ export default function DCreatePost() {
         <Button type="submit" gradientDuoTone="greenToBlue">
           Publish
         </Button>
-        {publishError && (
-          <Alert className="mt-5" color="failure">
-            {publishError}
-          </Alert>
-        )}
       </form>
     </div>
   );

@@ -37,7 +37,6 @@ export default function DProfile() {
   const [showModal, setShowModal] = useState(false);
   const filePickerRef = useRef();
   const dispatch = useDispatch();
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
