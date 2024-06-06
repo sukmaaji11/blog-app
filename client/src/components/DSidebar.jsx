@@ -1,15 +1,22 @@
 import React from "react";
 import { Sidebar } from "flowbite-react";
-import { HiUser, HiArrowSmRight, HiPencil } from "react-icons/hi";
+import {
+  HiUser,
+  HiArrowSmRight,
+  HiPencil,
+  HiDocumentText,
+} from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { signoutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function DSidebar() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
   const [tab, setTab] = useState("");
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -37,20 +44,33 @@ export default function DSidebar() {
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
-        <Sidebar.ItemGroup>
+        <Sidebar.ItemGroup className="flex flex-col gap-1">
           {/*Create Post*/}
           <Link to="/dashboard?tab=create-post">
             {" "}
             <Sidebar.Item
               active={tab === "create-post"}
               icon={HiPencil}
-              label={"Post"}
               labelColor="dark"
               as="div"
             >
               Create Post
             </Sidebar.Item>
           </Link>
+          {/*Post*/}
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=posts">
+              {" "}
+              <Sidebar.Item
+                active={tab === "posts"}
+                icon={HiDocumentText}
+                labelColor="dark"
+                as="div"
+              >
+                Post
+              </Sidebar.Item>
+            </Link>
+          )}
 
           {/*Create Profile*/}
           <Link to="/dashboard?tab=profile">
@@ -58,7 +78,7 @@ export default function DSidebar() {
             <Sidebar.Item
               active={tab === "profile"}
               icon={HiUser}
-              label={"User"}
+              label={currentUser.isAdmin ? "Admin" : "User"}
               labelColor="dark"
               as="div"
             >
