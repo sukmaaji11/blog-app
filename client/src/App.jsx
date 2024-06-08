@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute";
 import DCreatePost from "./components/DCreatePost";
+import UpdatePost from "./components/UpdatePost";
 
 export default function App() {
   return (
@@ -25,6 +26,10 @@ export default function App() {
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/dashboard?tab=create-post" element={<DCreatePost />} />
+          <Route
+            path="/dashboard/update-post/:postId"
+            element={<UpdatePost />}
+          />
         </Route>
         <Route path="/projects" element={<Projects />} />
       </Routes>

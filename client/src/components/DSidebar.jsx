@@ -5,6 +5,7 @@ import {
   HiArrowSmRight,
   HiPencil,
   HiDocumentText,
+  HiOutlineUserGroup,
 } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -57,6 +58,7 @@ export default function DSidebar() {
               Create Post
             </Sidebar.Item>
           </Link>
+
           {/*Post*/}
           {currentUser.isAdmin && (
             <Link to="/dashboard?tab=posts">
@@ -68,6 +70,21 @@ export default function DSidebar() {
                 as="div"
               >
                 Post
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          {/*User*/}
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=users">
+              {" "}
+              <Sidebar.Item
+                active={tab === "users"}
+                icon={HiOutlineUserGroup}
+                labelColor="dark"
+                as="div"
+              >
+                User
               </Sidebar.Item>
             </Link>
           )}

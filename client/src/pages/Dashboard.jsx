@@ -4,6 +4,7 @@ import DSidebar from "../components/DSidebar";
 import DProfile from "../components/DProfile";
 import DCreatePost from "../components/DCreatePost";
 import DPost from "../components/DPost";
+import DUser from "../components/DUser";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -25,6 +26,8 @@ export default function Dashboard() {
       {tab === "create-post" && <DCreatePost />}
       {/*Data Post */}
       {tab === "posts" && <DPost />}
+      {/*User */}
+      {tab === "users" && <DUser />}
       {/*Profile */}
       {tab === "profile" && <DProfile />}
     </div>
