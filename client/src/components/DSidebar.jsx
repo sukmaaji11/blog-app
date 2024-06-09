@@ -6,6 +6,8 @@ import {
   HiPencil,
   HiDocumentText,
   HiOutlineUserGroup,
+  HiAnnotation,
+  HiChartPie,
 } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -46,6 +48,19 @@ export default function DSidebar() {
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
+          {/*Dashboard*/}
+          <Link to="/dashboard?tab=dashboard">
+            {" "}
+            <Sidebar.Item
+              active={tab === "dashboard"}
+              icon={HiChartPie}
+              labelColor="dark"
+              as="div"
+            >
+              Dashboard
+            </Sidebar.Item>
+          </Link>
+
           {/*Create Post*/}
           <Link to="/dashboard?tab=create-post">
             {" "}
@@ -69,7 +84,22 @@ export default function DSidebar() {
                 labelColor="dark"
                 as="div"
               >
-                Post
+                Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          {/*Comment*/}
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=comments">
+              {" "}
+              <Sidebar.Item
+                active={tab === "comments"}
+                icon={HiAnnotation}
+                labelColor="dark"
+                as="div"
+              >
+                Comments
               </Sidebar.Item>
             </Link>
           )}

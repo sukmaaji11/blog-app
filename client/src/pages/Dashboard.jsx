@@ -5,6 +5,9 @@ import DProfile from "../components/DProfile";
 import DCreatePost from "../components/DCreatePost";
 import DPost from "../components/DPost";
 import DUser from "../components/DUser";
+import DashComments from "../components/DComments";
+import DComments from "../components/DComments";
+import DDashboard from "../components/DDashboard";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -22,10 +25,14 @@ export default function Dashboard() {
         {/*Sidebar*/}
         <DSidebar />
       </div>
+      {/*Dashboard */}
+      {tab === "dashboard" && <DDashboard />}
       {/*Create Post */}
       {tab === "create-post" && <DCreatePost />}
       {/*Data Post */}
       {tab === "posts" && <DPost />}
+      {/*Comment */}
+      {tab === "comments" && <DComments />}
       {/*User */}
       {tab === "users" && <DUser />}
       {/*Profile */}
