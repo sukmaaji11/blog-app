@@ -1,5 +1,6 @@
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import ReactQuill from "react-quill";
+import EditorToolbar, { modules, formats } from "./EditorToolbar";
 import "react-quill/dist/quill.snow.css";
 import {
   getDownloadURL,
@@ -172,16 +173,18 @@ export default function UpdatePost() {
             className="w-full h-72 object-cover"
           />
         )}
+        <EditorToolbar />
         <ReactQuill
           theme="snow"
-          value={formData.content}
           placeholder="Write something..."
           className="h-72 mb-12"
+          modules={modules}
+          formats={formats}
           required
           onChange={(value) => {
             setFormData({ ...formData, content: value });
           }}
-        />
+        />{" "}
         <Button type="submit" gradientDuoTone="purpleToPink">
           Update post
         </Button>
